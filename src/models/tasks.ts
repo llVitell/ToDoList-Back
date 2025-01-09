@@ -25,15 +25,9 @@ const deleteTaskModel = async (id: number) => {
 
 const createTaskModel = async (task: Partial<Task>) => {
 	await dbpool.query(
-		`INSERT INTO tasks (id, title, description, priority, type) 
-             VALUES (?, ?, ?, ?, ?)`,
-		[
-			task.id,
-			task.title,
-			task.description,
-			task.priority || 'low',
-			task.type || 'today'
-		]
+		`INSERT INTO tasks (title, description, priority, type) 
+             VALUES (?, ?, ?, ?)`,
+		[task.title, task.description, task.priority || 'low', task.type || 'today']
 	)
 }
 
