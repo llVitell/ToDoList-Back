@@ -19,8 +19,20 @@ const getTodayTasksModel = async () => {
 	return todaytasks
 }
 
-const deleteTaskModel = async (id: number) => {
-	await dbpool.query('DELETE FROM tasks WHERE id = ?', [id])
+const getUpcomingTasksModel = async () => {
+	const [upcomingTasks] = await dbpool.query(
+		'SELECT * FROM tasks WHERE type = ?',
+		['upcoming']
+	)
+	return upcomingTasks
+}
+
+const getCompletedTasksModel = async () => {
+	const [completedTasks] = await dbpool.query(
+		'SELECT * FROM tasks WHERE completed = ?',
+		[true]
+	)
+	return completedTasks
 }
 
 const createTaskModel = async (task: Partial<Task>) => {
@@ -31,10 +43,29 @@ const createTaskModel = async (task: Partial<Task>) => {
 	)
 }
 
+const updateTaskModel = async (id: number, task: Partial<Task>) => {
+	await dbpool.query(
+		`UPDATE tasks SET title = ?, description = ?, priority = ?, type = ?, completed = ? WHERE id = ?`,
+		[task.title, task.description, task.priority, task.type, task.completed, id]
+	)
+}
+
+const deleteTaskModel = async (id: number) => {
+	await dbpool.query('DELETE FROM tasks WHERE id = ?', [id])
+}
+
+const deleteCompletedTasksModel = async () => {
+	await dbpool.query('DELETE FROM tasks WHERE completed = ?', ['true'])
+}
+
 export {
 	getTasksModel,
 	getTaskModel,
 	getTodayTasksModel,
+	getUpcomingTasksModel,
+	getCompletedTasksModel,
+	createTaskModel,
+	updateTaskModel,
 	deleteTaskModel,
-	createTaskModel
+	deleteCompletedTasksModel
 }

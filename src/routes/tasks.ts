@@ -4,8 +4,10 @@ import {
 	getTasks,
 	getTodayTasks,
 	getUpcomingTasks,
+	getCompletedTasks,
 	deleteTask,
-	createTask
+	createTask,
+	updateTask
 } from '../controllers/tasks'
 
 const tasksRouter = Router()
@@ -13,7 +15,9 @@ const tasksRouter = Router()
 tasksRouter.get('/', getTasks)
 tasksRouter.get('/today', getTodayTasks)
 tasksRouter.get('/upcoming', getUpcomingTasks)
+tasksRouter.get('/completed', getCompletedTasks)
 tasksRouter.post('/', createTask)
+tasksRouter.put('/:id', updateTask)
 tasksRouter.get('/:id', getTask)
 tasksRouter.delete('/:id', deleteTask)
 
