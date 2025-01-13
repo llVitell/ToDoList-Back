@@ -37,17 +37,26 @@ const getCompletedTasksModel = async () => {
 
 const createTaskModel = async (task: Partial<Task>) => {
 	await dbpool.query(
-		`INSERT INTO tasks (title, description, priority, type) 
-             VALUES (?, ?, ?, ?)`,
-		[task.title, task.description, task.priority || 'low', task.type || 'today']
+		`INSERT INTO tasks (title, description, priority, type, completed) 
+             VALUES (?, ?, ?, ?, ?)`,
+		[
+			task.title,
+			task.description,
+			task.priority || 'low',
+			task.type || 'today',
+			task.completed || false
+		]
 	)
 }
 
 const updateTaskModel = async (id: number, task: Partial<Task>) => {
-	await dbpool.query(
-		`UPDATE tasks SET title = ?, description = ?, priority = ?, type = ?, completed = ? WHERE id = ?`,
-		[task.title, task.description, task.priority, task.type, task.completed, id]
-	)
+	const updates = Object.keys(task)
+	const query = `UPDATE tasks SET ${updates.map(
+		update => `${update} = ?`
+	)} WHERE id = ?`
+	const properties = [...Object.values(task), id]
+
+	await dbpool.query(query, properties)
 }
 
 const deleteTaskModel = async (id: number) => {
