@@ -13,16 +13,16 @@ const getTaskModel = async (id: number) => {
 
 const getTodayTasksModel = async () => {
 	const [todaytasks] = await dbpool.query(
-		'SELECT * FROM tasks WHERE type = ?',
-		['today']
+		'SELECT * FROM tasks WHERE type = ? AND completed = ?',
+		['today', false]
 	)
 	return todaytasks
 }
 
 const getUpcomingTasksModel = async () => {
 	const [upcomingTasks] = await dbpool.query(
-		'SELECT * FROM tasks WHERE type = ?',
-		['upcoming']
+		'SELECT * FROM tasks WHERE type = ? AND completed = ?',
+		['upcoming', false]
 	)
 	return upcomingTasks
 }
